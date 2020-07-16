@@ -1,5 +1,6 @@
 import scrapy
 import json
+from wegame.data.model import Sesssion, User
 
 class Demo1Spider(scrapy.Spider):
     name = 'demo1'
@@ -18,10 +19,10 @@ class Demo1Spider(scrapy.Spider):
             cookies={
                 'app_id': '10001',
                 'tgp_id': '27580710',
-                'tgp_ticket': '087A274DEAEAA17D130E98CAF6594556EB9476A8C19D75FF3A9E464702D292322CDA9EB5A9B762D62AED242192E860BB864C4A27B0E6EABEA89BF1C38DCA5D07E9DBC1AC6F1D328F8FD0F0880B46DC20CF613B161D8E76EF0F226AD7FA7D5AE778F7D44EB264A2A0AEF18858E2973D3DF70976DB66AC0B43577FF6CBA9A233B0',
+                'tgp_ticket': '517163FA7D97936823827C48AB99344A062166E349F4426682C85795B5E6CB709408366B91C3B4B82CCE65A171E45A97B6B2BE86ABA07A9D001A9E7D82CA8E30B1A5EDC990AD9C9C2F580D005A41DC2C2941F17EC8230BA91A1E1CB5ED3847E1EF9B1CCF86B516F5877407972B62B98143C7FADDF1905EC07FF1354294F73197',
                 'platform': 'qq',
                 'account': '1052036710',
-                'skey': 'MQTl0Lrrcg',
+                'skey': 'MkscVEBnSz',
                 'mac': '92f2b852ec1bf9dd',
                 'machine_type': 'OPPO+R17+Pro',
                 'channel_number': '10111',
@@ -38,5 +39,13 @@ class Demo1Spider(scrapy.Spider):
         )
 
     def parse(self, response):
-        print(response)
+        result = json.loads(response.text)
+        session = Sesssion()
+        try:
+            for obj in result['data']['player_list']:
+                session.add(User(slol_id=obj.get("slol_id", '') ,name=obj.get("name", '') ,level=obj.get("level", '') ,ranking=obj.get("ranking", '') ,league_points=obj.get("league_points", '') ,rank=obj.get("rank", '') ,icon_id=obj.get("icon_id", '') ,tier=obj.get("tier", '') ))
+                session.commit()
+        except Exception as e:
+            print(e)
+        session.close()
         pass

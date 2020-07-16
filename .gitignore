@@ -1,0 +1,5 @@
+.idea
+**/__pycache__/
+**/__pycache__/*.pyc
+*.pyc
+wegame/spiders/__pycache__/demo1.cpython-37.pyc
