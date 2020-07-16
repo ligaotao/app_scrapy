@@ -19,6 +19,23 @@ Sesssion=sessionmaker(bind=engine)
 Base = declarative_base()
 metadata = Base.metadata
 
+def update_or_create(session, model, **kwargs):
+    created = False
+
+    defaults = kwargs['defaults']
+    select_dict = kwargs.pop('defaults', {})
+    obj = session.query(model).filter_by(**select_dict).first()
+    if obj is not None:
+        for k, v in defaults.items():
+            setattr(obj, k, v() if callable(v) else v)
+    else:
+        kwargs.update(defaults)
+        obj = model(**kwargs)
+        session.add(obj)
+        created = True
+    session.commit()
+    return obj, created
+
 class User(Base):
     __tablename__ = 'users'
 
@@ -31,6 +48,7 @@ class User(Base):
     rank = Column(Integer)
     icon_id = Column(Integer)
     tier = Column(Integer)
+    area_id = Column(Integer)
 
     def __repr__(self):
         return "<User (name='%s')>" (self.name)
