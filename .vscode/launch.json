@@ -5,11 +5,28 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Scrapy",
+            "name": "ScrapyChess",
             "type": "python",
             "request": "launch",
             "module": "scrapy",
-            "args": ["crawl", "demo1", "-o", "test.json"]
+            "args": [
+                "crawl",
+                "chess",
+                "-o",
+                "test.json"
+            ]
+        },
+        {
+            "name": "ScrapyRank",
+            "type": "python",
+            "request": "launch",
+            "module": "scrapy",
+            "args": [
+                "crawl",
+                "rank_list",
+                "-o",
+                "test.json"
+            ]
         }
     ]
 }
