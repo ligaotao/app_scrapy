@@ -3,16 +3,16 @@ from scrapy import Request
 USER_RANK_LIST = 'https://m.wegame.com.cn/api/mobile/lua/proxy/index/mwg_tft_proxy//get_total_tier_rank_list'
 USER_GAME_INFO = 'https://m.wegame.com.cn/api/mobile/lua/proxy/index/mwg_tft_proxy/get_user_game_info'
 USER_BATTLE_LIST = 'https://m.wegame.com.cn/api/mobile/lua/proxy/index/mwg_tft_proxy//get_user_battle_list'
-USER_BATTLE_DETAIL = 'https://m.wegame.com.cn/api/mobile/lua/proxy/index/mwg_tft_proxy/get_battle_d'
+USER_BATTLE_DETAIL = 'https://m.wegame.com.cn/api/mobile/lua/proxy/index/mwg_tft_proxy/get_battle_detail'
 CHESS_INFO = 'https://game.gtimg.cn/images/lol/act/img/tft/js/chess.js'
 
 COOKIES = {
         'app_id': '10001',
         'tgp_id': '27580710',
-        'tgp_ticket': 'FA6E755160EF4C8C699004D2A6A37C7EA9D8A6FE27DD29622BC68C8B9EDFBA1DCDB905E76510F63D2F251308B2A910FB02A2D191ABD433593CC1D157F7B88A4C56AA2D0F4DC0B925BFB23036AF1A17132E9465F0FD2A324296238025AC699505E7B82CEC3A9F7F6612402DEED415BC74DFED90FFA93F4F4FACCD5C8032125A86',
+        'tgp_ticket': 'A0274B7EB7C96F3CB97BB0611853A5055950D7CF042AAA74FE7881FDD9300A300FC03E5EA9E79C45A249A4C34DD4CFE20105CC9CCC77D3EAF79052B1928E1B5A7CA404DFDF7BA8FD1FAAC7263929B82CE178BDA4C6AB99624B2C2F81DD6069CB8F95B8BDB798219D6833C096C3D161C57F9CDD2FCEBCFD41B209CCEE1465C13E',
         'platform': 'qq',
         'account': '1052036710',
-        'skey': 'Mp7BFJoSRK',
+        'skey': 'M6bUIC4HUu',
         'mac': '92f2b852ec1bf9dd',
         'machine_type': 'OPPO+R17+Pro',
         'channel_number': '10111',

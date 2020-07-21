@@ -3,3 +3,4 @@
 **/__pycache__/*.pyc
 *.pyc
 wegame/spiders/__pycache__/demo1.cpython-37.pyc
+wegame/data/alembic.ini

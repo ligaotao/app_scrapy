@@ -27,6 +27,18 @@
                 "-o",
                 "test.json"
             ]
-        }
+        },
+        {
+            "name": "ScrapyBattleDetail",
+            "type": "python",
+            "request": "launch",
+            "module": "scrapy",
+            "args": [
+                "crawl",
+                "battle_detail",
+                "-o",
+                "test.json"
+            ]
+        },
     ]
 }

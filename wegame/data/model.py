@@ -12,7 +12,7 @@ conf=configparser.ConfigParser()
 conf.read(cfgpath)
 url = conf.get("alembic", "sqlalchemy.url")
 
-engine=create_engine(url)
+engine=create_engine(url, echo=False)
 Sesssion=sessionmaker(bind=engine)
 # session=Sesssion()
 
@@ -65,7 +65,7 @@ class Battle(Base):
 class BattleDetail(Base):
     __tablename__ = 'battle_detail'
 
-    id = Column(Integer , Sequence('battle_detail_id_seq'), primary_key=True, unique=True)
+    id = Column(BigInteger , Sequence('battle_detail_id_seq'), primary_key=True, unique=True)
     battle_id = Column(Integer, ForeignKey("battles.id", ondelete = 'CASCADE'))
     user_id = Column(Integer, ForeignKey("users.id", ondelete = 'CASCADE'))
     gold_left = Column(Integer)
