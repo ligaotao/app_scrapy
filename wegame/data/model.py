@@ -2,7 +2,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import *
 from sqlalchemy.orm import sessionmaker
 import configparser
-
+import datetime
 import os
 #用os模块来读取
 curpath=os.path.dirname(os.path.realpath(__file__))
@@ -19,12 +19,28 @@ Sesssion=sessionmaker(bind=engine)
 Base = declarative_base()
 metadata = Base.metadata
 
+def select_or_insert(session, model, **kwargs):
+    created = False
+    defaults = kwargs['defaults']
+    select_dict = kwargs.pop('defaults', {})
+
+    obj = session.query(model).filter_by(**kwargs).first()
+
+    if obj is None:
+        kwargs.update(defaults)
+        obj = model(**kwargs)
+        session.add(obj)
+        created = True
+        session.add(obj)
+        session.commit()
+    return obj, created
+
 def update_or_create(session, model, **kwargs):
     created = False
 
     defaults = kwargs['defaults']
     select_dict = kwargs.pop('defaults', {})
-    obj = session.query(model).filter_by(**select_dict).first()
+    obj = session.query(model).filter_by(**kwargs).first()
     if obj is not None:
         for k, v in defaults.items():
             setattr(obj, k, v() if callable(v) else v)
@@ -36,7 +52,14 @@ def update_or_create(session, model, **kwargs):
     session.commit()
     return obj, created
 
-class User(Base):
+
+class DataTime(object):
+
+    created_time = Column('created_time', DateTime, server_default=func.now()) 
+    updated_time = Column('updated_time', DateTime, server_default=func.now(), onupdate=func.now()) 
+
+
+class User(DataTime, Base):
     __tablename__ = 'users'
 
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
@@ -50,17 +73,20 @@ class User(Base):
     tier = Column(Integer)
     area_id = Column(Integer)
 
+
     def __repr__(self):
         return "<User (name='%s')>" (self.name)
 
 
-class Battle(Base):
+class Battle(DataTime, Base):
     __tablename__ = 'battles'
 
     id = Column(BigInteger, primary_key=True, unique=True)
     area_id = Column(Integer)
     start_time = Column(TIMESTAMP)
     game_mode = Column(Integer)
+    slol_id = Column(String(50), comment='来源玩家_id')
+    state = Column(Integer, default=0, comment='爬取状态') # 0 未爬取 1 爬取完成
 
 class BattleDetail(Base):
     __tablename__ = 'battle_detail'
@@ -80,7 +106,7 @@ class BattleDetail(Base):
     total_damage_to_players = Column(Integer)
     total_trait_num = Column(Integer)
     duration = Column(Integer)
-
+    battle_ranking = Column(Integer)
     __table_args__ = (
         PrimaryKeyConstraint('battle_id', 'user_id'),
         {},
@@ -108,7 +134,7 @@ class Chess(Base):
     life_data = Column(String(50))
     life_mag = Column(String(50))
     magic = Column(String(50))
-    name = Column(String(50))
+    image = Column(String(50))
     original_image = Column(Text)
     price = Column(String(50))
     pro_status = Column(String(50))
@@ -129,6 +155,19 @@ class Chess(Base):
     #     PrimaryKeyConstraint('id', 'version'),
     #     {},
     # )
+
+class Items(Base):
+    """
+    装备表
+    """
+    __tablename__ = 'items'
+
+    id = Column(Integer, primary_key = True)
+    name = Column(String(50))
+    property = Column(Text)
+    job_id = Column(Integer)
+    formula = Column(ARRAY(Integer))
+
 
 
 class BattleChess(Base):
