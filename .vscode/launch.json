@@ -17,6 +17,18 @@
             ]
         },
         {
+            "name": "ScrapyBattle",
+            "type": "python",
+            "request": "launch",
+            "module": "scrapy",
+            "args": [
+                "crawl",
+                "battle_list",
+                "-o",
+                "test.json"
+            ]
+        },
+        {
             "name": "ScrapyRank",
             "type": "python",
             "request": "launch",
