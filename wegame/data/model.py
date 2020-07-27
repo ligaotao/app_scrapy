@@ -12,6 +12,9 @@ conf=configparser.ConfigParser()
 conf.read(cfgpath)
 url = conf.get("alembic", "sqlalchemy.url")
 
+redis_host = conf.get("alembic", "redis.url")
+redis_password = conf.get("alembic", "redis.password")
+
 engine=create_engine(url, echo=False)
 Sesssion=sessionmaker(bind=engine)
 # session=Sesssion()
