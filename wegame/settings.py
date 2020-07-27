@@ -66,6 +66,10 @@ ROBOTSTXT_OBEY = False
 #    'wegame.pipelines.WegamePipeline': 300,
 #}
 
+ITEM_PIPELINES = {
+    'scrapy_redis.pipelines.RedisPipeline': 400
+}
+
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True
@@ -86,3 +90,15 @@ ROBOTSTXT_OBEY = False
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+# 使用scrapy-redis组件的去重队列
+DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+# 使用scrapy-redis组件自己的调度器
+SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+# 是否允许暂停
+SCHEDULER_PERSIST = True
+
+REDIS_HOST = '47.93.220.203'
+REDIS_PORT = 6379
+REDIS_ENCODING = 'utf-8'
+REDIS_PARAMS = {'password': 'li774206981'}
