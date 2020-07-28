@@ -78,7 +78,7 @@ class BattleListSpider(RedisSpider):
             print(e)
         session.close()
         if result['data']['next_offset'] != -1:
-            logging.info(f"""当前用户：{user.name} 当前页码：{result['data']['next_offset'] / 10}""")
+            logging.info(f"""当前用户：{slol_id} 当前页码：{result['data']['next_offset'] / 10}""")
             yield self.request(area_id=area_id, slol_id=slol_id, offset=result['data']['next_offset'])
         else:
             logging.info(f"""当前用户：{slol_id} 结束""")

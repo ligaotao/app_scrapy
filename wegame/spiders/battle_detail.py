@@ -16,7 +16,7 @@ class BattleDetailSpider(scrapy.Spider):
         self.session = Sesssion()
 
     def start_requests(self):
-        self.battle = self.session.query(Battle).filter(Battle.state ==None).all()
+        self.battle = self.session.query(Battle).filter(Battle.state ==0).all()
         self.index = 0
         self.battle_len = len(self.battle)
         # yield self.request(290)
