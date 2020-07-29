@@ -9,10 +9,22 @@ class RankListSpider(scrapy.Spider):
     allowed_domains = ['wegame.com.cn']
     # start_urls = ['https://m.wegame.com.cn/api/mobile/lua/proxy/index/mwg_tft_proxy//get_total_tier_rank_list']
 
-    def start_requests(self):
-        yield self.reauest(500 * 20)
+    def __init__(self):
+        super().__init__()
+        self.rank_less = 100
+        self.session = Sesssion()
 
-    def reauest(self, offset):
+    def start_requests(self):
+        # 首先重置一下所有服务器的 排行
+        self.session.query(User).update({
+            User.ranking: -1
+        })
+        area_ids = [i for i in range(1,28)] + [30]
+        # area_ids = [i for i in range(1,5)]
+        for area_id in area_ids:
+            yield self.reauest(area_id, 0)
+
+    def reauest(self, area_id, offset):
         LOLServer = """
             t: "艾欧尼亚  电信", v: "1", status: "1"
             t: "比尔吉沃特  网通", v: "2", status: "1"
@@ -47,24 +59,26 @@ class RankListSpider(scrapy.Spider):
         return get_user_rank_list(
             callback=self.parse,
             body=json.dumps({
-                "area_id": 9,
+                "area_id": area_id,
                 "offset": offset
-            })
+            }),
+            dont_filter=True
         )
 
     def parse(self, response):
         result = json.loads(response.text)
         body = json.loads(response.request.body)
-        session = Sesssion()
+        session = self.session
+        area_id = body['area_id']
         try:
             for obj in result['data']['player_list']:
-                obj['area_id'] = body['area_id']
+                obj['area_id'] = area_id
                 update_or_create(session, User, slol_id=obj.get('slol_id'),defaults=obj)
         except Exception as e:
             print(e)
         session.close()
-        if result['data']['next_offset'] != -1:
+        if result['data']['next_offset'] != -1 and result['data']['next_offset'] < self.rank_less:
             logging.info(f"""当前页码{result['data']['next_offset'] / 20}""")
-            yield self.reauest(result['data']['next_offset'])
+            yield self.reauest(area_id, result['data']['next_offset'])
         else:
             logging.info(f"""当前服务器数据结束""")

@@ -18,11 +18,13 @@ class BattleListSpider(RedisSpider):
         self.session = Sesssion()
         today = datetime.datetime.now()
         self.start_time = datetime.datetime(today.year, today.month, today.day)
-        self.last_time = self.start_time - datetime.timedelta(days=10)
+        self.last_time = self.start_time - datetime.timedelta(days=3)
         self.user = None
 
     def make_request_from_data(self, data):
-        return self.request(area_id=9, slol_id=str(data, "utf-8"), offset=0)
+        data_str = str(data, encoding='utf-8')
+        user = json.loads(data_str)
+        return self.request(area_id=user.get('area_id'), slol_id=user.get('slol_id'), offset=0)
 
 
     # def start_requests(self):
