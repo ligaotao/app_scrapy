@@ -104,7 +104,7 @@ class BattleDetail(Base):
     players_eliminated = Column(Integer)
     show_last_round = Column(String(20))
     snapshot_time = Column(Integer)
-    snapshot_url = Column(String(50))
+    snapshot_url = Column(Text)
     time_eliminated = Column(Text)
     total_damage_to_players = Column(Integer)
     total_trait_num = Column(Integer)

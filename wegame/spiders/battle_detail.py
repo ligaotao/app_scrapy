@@ -16,7 +16,7 @@ class BattleDetailSpider(scrapy.Spider):
         self.session = Sesssion()
 
     def start_requests(self):
-        self.battle = self.session.query(Battle).filter(Battle.state ==0).all()
+        self.battle = self.session.query(Battle).filter(Battle.state ==0).filter(Battle.area_id !=9 ).all()
         self.index = 0
         self.battle_len = len(self.battle)
         # yield self.request(290)
@@ -53,7 +53,8 @@ class BattleDetailSpider(scrapy.Spider):
                     "area_id": area_id,
                     "battle_id": battle_id,
                     "slol_id": slol_id,
-                })
+                }),
+                dont_filter=True
             )
 
     def parse(self, response):
